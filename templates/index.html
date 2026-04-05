@@ -234,6 +234,8 @@
       <script>
       const catlabels = {{ (cat_labels or []) | tojson }};
       const catValues = {{ (cat_values or []) | tojson }};
+      const daylabels = {{ (day_labels or []) | tojson }};
+      const dayValues = {{ (day_values or []) | tojson }};
 
       if (document.getElementById("catChart")){
         const catCtx = document.getElementById("catChart").getContext("2d");
@@ -269,11 +271,41 @@
           },
         });
       }
-    </script>
-          
 
-    </main>
-  </body>
+      if (document.getElementById("dayChart")){
+        const dayCtx = document.getElementById("dayChart").getContext("2d");
+
+        new Chart(dayCtx, {
+          type: "bar",
+          data: {
+            labels: daylabels,
+            datasets: [
+              {
+                label: "Daily Spending",
+                data: dayValues,
+                backgroundColor: "#bc90ffff",
+              },
+            ],
+          },
+          options: {
+            plugins: {
+              legend: {
+                labels: {
+                  color: "#cbd5e1",
+                },
+              },
+            },
+            scales: {
+              x: {ticks: {color: "#cbd5e1"},grid: {color: "#334155"} },
+              y: {ticks: {color: "#cbd5e1"},grid: {color: "#334155"} },
+            },
+          }
+        });
+      }
+    </script>
+
+  </main>
+</body>
 </html>
 
 

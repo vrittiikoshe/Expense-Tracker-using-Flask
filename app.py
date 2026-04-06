@@ -1,20 +1,20 @@
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect, Response
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date, datetime
 from sqlalchemy import func
 
 app = Flask(__name__)
 
-# 🔐 Secret key (for flash messages)
+# Secret key
 app.config['SECRET_KEY'] = 'secret123'
 
-# 🗄️ Database config
+# Database config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expenses.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-# 📦 Model
+# Model
 class Expense(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(120), nullable=False)
@@ -23,16 +23,16 @@ class Expense(db.Model):
     date = db.Column(db.Date, nullable=False, default=date.today)
 
 
-# 🛠️ Create DB
+# Create DB
 with app.app_context():
     db.create_all()
 
 
-# 📂 Categories
+# Categories
 CATEGORIES = ['Food', 'Transport', 'Rent', 'Utilities', 'Health']
 
 
-# 🔧 Helper function
+# Helper function
 def parse_date_or_none(s):
     if not s:
         return None
@@ -42,7 +42,7 @@ def parse_date_or_none(s):
         return None
 
 
-# 🏠 Home Route
+# Home route
 @app.route('/')
 def index():
     start_str = (request.args.get("start") or "").strip()
@@ -52,13 +52,11 @@ def index():
     start_date = parse_date_or_none(start_str)
     end_date = parse_date_or_none(end_str)
 
-    # ❗ Date validation
     if start_date and end_date and end_date < start_date:
         flash("End date cannot be before start date", "error")
         start_date = end_date = None
         start_str = end_str = ""
 
-    # 🔍 Main query
     q = Expense.query
 
     if start_date:
@@ -71,8 +69,7 @@ def index():
     expenses = q.order_by(Expense.date.desc(), Expense.id.desc()).all()
     total = round(sum(e.amount for e in expenses), 2)
 
-    # 📊 Chart query (category-wise)
-    #pie chart
+    # Pie chart (category-wise)
     cat_q = db.session.query(
         Expense.category,
         func.sum(Expense.amount)
@@ -86,17 +83,15 @@ def index():
         cat_q = cat_q.filter(Expense.category == selected_category)
 
     cat_rows = cat_q.group_by(Expense.category).all()
-    print(cat_rows)
     cat_labels = [c for c, _ in cat_rows]
-    cat_values = [float(v) for _, v in cat_rows]
-    print(cat_values)
-    
+    cat_values = [float(v or 0) for _, v in cat_rows]
 
-    # Day chart
+    # Day chart (date-wise)
     day_q = db.session.query(
         Expense.date,
         func.sum(Expense.amount)
     )
+
     if start_date:
         day_q = day_q.filter(Expense.date >= start_date)
     if end_date:
@@ -104,13 +99,10 @@ def index():
     if selected_category:
         day_q = day_q.filter(Expense.category == selected_category)
 
-    day_rows = day_q.group_by(Expense.category).order_by(Expense.date).all()    
-    print(day_rows)
+    day_rows = day_q.group_by(Expense.date).order_by(Expense.date).all()
     day_labels = [d.isoformat() for d, _ in day_rows]
     day_values = [round(float(v or 0), 2) for _, v in day_rows]
-    print(day_values)
-    
-    
+
     return render_template(
         'index.html',
         categories=CATEGORIES,
@@ -127,7 +119,7 @@ def index():
     )
 
 
-# ➕ Add Expense
+# Add expense
 @app.route('/add', methods=['POST'])
 def add():
     description = (request.form.get("description") or "").strip()
@@ -135,7 +127,6 @@ def add():
     category = (request.form.get("category") or "").strip()
     date_str = (request.form.get("date") or "").strip()
 
-    # ❗ Validation
     if not description or not amount_str or not category:
         flash("Please fill description, amount, category", "error")
         return redirect(url_for("index"))
@@ -167,7 +158,7 @@ def add():
     return redirect(url_for("index"))
 
 
-# ❌ Delete Expense
+# Delete expense
 @app.route('/delete/<int:expense_id>', methods=['POST'])
 def delete(expense_id):
     e = Expense.query.get_or_404(expense_id)
@@ -178,6 +169,46 @@ def delete(expense_id):
     return redirect(url_for("index"))
 
 
-# ▶️ Run app
+# Export CSV
+@app.route('/export.csv')
+def export_csv():
+    start_str = (request.args.get("start") or "").strip()
+    end_str = (request.args.get("end") or "").strip()
+    selected_category = (request.args.get("category") or "").strip()
+
+    start_date = parse_date_or_none(start_str)
+    end_date = parse_date_or_none(end_str)
+
+    q = Expense.query
+
+    if start_date:
+        q = q.filter(Expense.date >= start_date)
+    if end_date:
+        q = q.filter(Expense.date <= end_date)
+    if selected_category:
+        q = q.filter(Expense.category == selected_category)
+
+    expenses = q.order_by(Expense.date, Expense.id).all()
+
+    lines = ["Description,Amount,Category,Date"]
+    for e in expenses:
+        lines.append(f"{e.description},{e.amount:.2f},{e.category},{e.date.isoformat()}")
+
+    csv_data = "\n".join(lines)
+
+    fname_start = start_str or "all"
+    fname_end = end_str or "all"
+    filename = f"expenses_{fname_start}_to_{fname_end}.csv"
+
+    return Response(
+        csv_data,
+        headers={
+            "Content-Type": "text/csv",
+            "Content-Disposition": f"attachment; filename={filename}"
+        }
+    )
+
+
+# Run app
 if __name__ == '__main__':
     app.run(debug=True)

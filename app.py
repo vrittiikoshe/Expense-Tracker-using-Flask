@@ -267,4 +267,4 @@ def export_csv():
 
 # Run app
 if __name__ == '__main__':
-    app.run(debug=True, port=4800)
+    app.run(debug=True)

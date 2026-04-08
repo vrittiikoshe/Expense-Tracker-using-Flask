@@ -1,17 +1,22 @@
 # 💸 Expense Tracker (Flask)
 
-A full-stack Expense Tracker web application built using Python and Flask that allows users to manage daily expenses, visualize spending, and export data.
+A full-stack Expense Tracker web application built using Python and Flask that allows users to manage daily expenses, filter data, and visualize spending patterns.
 
 ---
 
-## 🚀 Features
+## 🚀 Live Demo
+
+🔗 https://expense-tracker-k4l7.onrender.com
+
+---
+
+## ✨ Features
 
 * ➕ Add, edit, and delete expenses
 * 📅 Filter expenses by date range and category
-* 📊 Visualize spending using charts (category-wise & daily trends)
-* 📁 Export filtered data to CSV
+* 📊 Visualize spending using charts (category-wise)
 * 💰 Automatic total expense calculation
-* 🎨 Clean UI with Tailwind CSS
+* 🎨 Clean and responsive UI using Tailwind CSS
 
 ---
 
@@ -21,7 +26,7 @@ A full-stack Expense Tracker web application built using Python and Flask that a
 * **Database:** SQLite, SQLAlchemy
 * **Frontend:** HTML, Tailwind CSS, JavaScript
 * **Charts:** Chart.js
-* **Version Control:** Git & GitHub
+* **Deployment:** Render
 
 ---
 
@@ -30,7 +35,8 @@ A full-stack Expense Tracker web application built using Python and Flask that a
 ```
 ExpenseTracker/
 │── app.py
-│── expenses.db
+│── requirements.txt
+│── Procfile
 │── templates/
 │   ├── index.html
 │   ├── edit.html
@@ -45,8 +51,8 @@ ExpenseTracker/
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your-username/ExpenseTracker.git
-cd ExpenseTracker
+git clone https://github.com/vrittiikoshe/Expense-Tracker-using-Flask.git
+cd Expense-Tracker-using-Flask
 ```
 
 2. Create virtual environment:
@@ -60,16 +66,16 @@ venv\Scripts\activate      # Windows
 3. Install dependencies:
 
 ```bash
-pip install flask flask_sqlalchemy
+pip install -r requirements.txt
 ```
 
-4. Run the application:
+4. Run the app:
 
 ```bash
 python app.py
 ```
 
-5. Open in browser:
+5. Open browser:
 
 ```
 http://127.0.0.1:5000/
@@ -77,36 +83,30 @@ http://127.0.0.1:5000/
 
 ---
 
-## 📊 Screenshots
+## ⚠️ Note
 
-(Add your project screenshots here)
+* SQLite database may reset on free deployment (Render).
+* For production, PostgreSQL is recommended.
 
 ---
 
-## ✨ Future Improvements
+## 🔮 Future Improvements
 
-* 🔐 User authentication (login/signup)
+* 🔐 User authentication (Login/Signup)
 * 🌐 REST API support
-* 📱 Responsive mobile design improvements
-* ☁️ Deployment (Render / Railway)
-* 📈 Advanced analytics
+* 📱 Mobile responsiveness improvements
+* ☁️ PostgreSQL integration
+* 📈 Advanced analytics dashboard
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to fork the repo and submit a pull request.
-
----
-
-## 📌 Author
+## 👩‍💻 Author
 
 **Vritti Koshe**
 Python Developer | Backend Enthusiast
 
 ---
 
-## ⭐ Show Your Support
+## ⭐ Support
 
-If you like this project, give it a ⭐ on GitHub!
-
+If you like this project, consider giving it a ⭐ on GitHub!

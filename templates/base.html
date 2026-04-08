@@ -27,6 +27,8 @@
     </header>
 
     <main class="mx-auto max-w-6xl px-4 py-8">
+
+  <!-- Flash messages -->
       <!-- Flash messages -->
       {% with messages = get_flashed_messages(with_categories=true) %} {% if
       messages %}
@@ -49,3 +51,5 @@
     {% block body_end %}{% endblock %}
   </body>
 </html>
+ 
+

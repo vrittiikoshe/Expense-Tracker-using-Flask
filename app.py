@@ -2,6 +2,10 @@ from flask import Flask, render_template, request, url_for, flash, redirect, Res
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date, datetime, date as dt_date
 from sqlalchemy import func
+from flask import get_flashed_messages
+
+
+
 
 app = Flask(__name__)
 
@@ -195,7 +199,31 @@ def edit_post(expense_id):
         flash("Amount must be positive number", "error")
         return redirect(url_for("edit", expense_id=expense_id))
     
-return render_template('edit.html', expense=e, categories=CATEGORIES, today=dt_date.today().isoformat())
+    try:
+        d = datetime.strptime(date_str, "%Y-%m-%d").date() if date_str else date.today()
+    except ValueError:
+        d = dt_date.today()
+        
+    if (
+        e.description != description or
+        e.amount != amount or
+        e.category != category or
+        e.date != d
+    ):
+        e.description = description
+        e.amount = amount
+        e.category = category
+        e.date = d
+
+        db.session.commit()
+        flash("Expense updated successfully", "success")
+    else:
+        flash("No changes made", "error")
+    
+
+    return redirect(url_for("index"),code = 303)
+    
+    #return render_template('edit.html', expense=e, categories=CATEGORIES, today=dt_date.today().isoformat())
 
 # Export CSV
 @app.route('/export.csv')
@@ -235,7 +263,7 @@ def export_csv():
             "Content-Disposition": f"attachment; filename={filename}"
         }
     )
-
+    get_flashed_messages()
 
 # Run app
 if __name__ == '__main__':

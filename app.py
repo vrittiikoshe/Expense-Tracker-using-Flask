@@ -168,6 +168,7 @@ def delete(expense_id):
     flash("Expense deleted", "success")
     return redirect(url_for("index"))
 
+# Edit expense
 @app.route('/edit/<int:expense_id>', methods=['GET'])
 def edit(expense_id):
     e = Expense.query.get_or_404(expense_id)

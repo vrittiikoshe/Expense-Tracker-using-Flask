@@ -207,7 +207,7 @@
                     py-1
                     rounded-lg
                     "
-                    href = "{{url_for('edit')}}">EDIT</a>
+                    href = "{{url_for('edit', expense_id=e.id)}}">EDIT</a>
                     
                   <form method ="post" 
                   action="{{url_for('delete',expense_id=e.id)}}"

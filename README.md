@@ -4,12 +4,6 @@ A full-stack Expense Tracker web application built using Python and Flask that a
 
 ---
 
-## 🚀 Live Demo
-
-🔗 https://expense-tracker-k4l7.onrender.com
-
----
-
 ## ✨ Features
 
 * ➕ Add, edit, and delete expenses
@@ -26,17 +20,15 @@ A full-stack Expense Tracker web application built using Python and Flask that a
 * **Database:** SQLite, SQLAlchemy
 * **Frontend:** HTML, Tailwind CSS, JavaScript
 * **Charts:** Chart.js
-* **Deployment:** Render
 
 ---
 
 ## 📂 Project Structure
 
-```
+```text
 ExpenseTracker/
 │── app.py
 │── requirements.txt
-│── Procfile
 │── templates/
 │   ├── index.html
 │   ├── edit.html
@@ -48,45 +40,48 @@ ExpenseTracker/
 
 ## ⚙️ Installation & Setup
 
-1. Clone the repository:
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/vrittiikoshe/Expense-Tracker-using-Flask.git
 cd Expense-Tracker-using-Flask
 ```
 
-2. Create virtual environment:
+### 2. Create a virtual environment
+
+**Mac/Linux:**
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # Mac/Linux
-venv\Scripts\activate      # Windows
+source venv/bin/activate
 ```
 
-3. Install dependencies:
+**Windows:**
+
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+### 3. Install dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run the app:
+### 4. Run the application
 
 ```bash
 python app.py
 ```
 
-5. Open browser:
+### 5. Open the application
 
-```
+Open your browser and visit:
+
+```text
 http://127.0.0.1:5000/
 ```
-
----
-
-## ⚠️ Note
-
-* SQLite database may reset on free deployment (Render).
-* For production, PostgreSQL is recommended.
 
 ---
 
@@ -110,3 +105,5 @@ Python Developer | Backend Enthusiast
 ## ⭐ Support
 
 If you like this project, consider giving it a ⭐ on GitHub!
+
+

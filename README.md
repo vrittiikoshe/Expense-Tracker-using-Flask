@@ -3,6 +3,10 @@
 A full-stack Expense Tracker web application built using Python and Flask that allows users to manage daily expenses, filter data, and visualize spending patterns.
 
 ---
+## 🌐 Live Demo: 
+https://expense-tracker-k4l7.onrender.com/
+
+---
 
 ## ✨ Features
 
